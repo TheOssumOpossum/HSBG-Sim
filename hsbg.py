@@ -168,8 +168,8 @@ def create_minion(minion_id=None, name=None):
 	if minion_id is None and name is None:
 		print("I cant create nothing bro")
 		return
-	name_id_map = {"Alleycat": 1, "Tabbycat": 2, "Direwolf Alpha": 3, "Voidwalker": 4, "Vulgar Humunculus": 5, "Mecharoo": 6, "Joe-E Bot": 7, "Micro Machine": 8, "Murloc Tidecaller": 9, "Murloc Tidehunter": 10, "Murloc": 11, "Rockpool Hunter": 12, "Righteous Protector": 13, "Selfless Hero": 14, "Wrath Weaver": 15}
-	id_name_map = {1: "Alleycat", 2: "Tabbycat", 3: "Direwolf Alpha", 4: "Voidwalker", 5: "Vulgar Humunculus", 6: "Mecharoo", 7: "Joe-E Bot", 8: "Micro Machine", 9: "Murloc Tidecaller", 10: "Murloc Tidehunter", 11: "Murloc", 12: "Rockpool Hunter", 13: "Righteous Protector", 14: "Selfless Hero", 15: "Wrath Weaver"}
+	name_id_map = {"Alleycat": 1, "Tabbycat": 2, "Direwolf Alpha": 3, "Voidwalker": 4, "Vulgar Humunculus": 5, "Mecharoo": 6, "Joe-E Bot": 7, "Micro Machine": 8, "Murloc Tidecaller": 9, "Murloc Tidehunter": 10, "Murloc": 11, "Rockpool Hunter": 12, "Righteous Protector": 13, "Selfless Hero": 14, "Wrath Weaver": 15, "Amalgam": 16}
+	id_name_map = {1: "Alleycat", 2: "Tabbycat", 3: "Direwolf Alpha", 4: "Voidwalker", 5: "Vulgar Humunculus", 6: "Mecharoo", 7: "Joe-E Bot", 8: "Micro Machine", 9: "Murloc Tidecaller", 10: "Murloc Tidehunter", 11: "Murloc", 12: "Rockpool Hunter", 13: "Righteous Protector", 14: "Selfless Hero", 15: "Wrath Weaver", 16: "Amalgam"}
 	if name is not None:
 		minion_id = name_id_map.get(name)
 		if minion_id is None:
@@ -234,11 +234,15 @@ def create_minion(minion_id=None, name=None):
 	elif minion_id == 15:
 		att = 1
 		hp = 1
+	elif minion_id == 16:
+		att = 1
+		hp = 1
 	return Minion(name, att, hp, stars=stars, taunt=taunt, deathrattle=deathrattle, deatheffect=deatheffect, shield=shield)
 
 def simulate(bottom_board_number, top_board_number, seeds=None, simulations=1000):
 	bottom_board = build_board(bottom_board_number)
 	top_board = build_board(top_board_number)
+	handle_hero_powers(bottom_board, top_board, bottom_board_number, top_board_number)
 	bottom_board.cleanup()
 	top_board.cleanup()
 	results = {}
@@ -325,37 +329,114 @@ def build_board(board_number):
 		board.summon(create_minion(14).buff(1,1))
 	elif board_number == 29:
 		board.summon(create_minion(15).buff(1,1))
-		#rat king
-		#curator
-		#rag
-		#nefarian
-		#lich king
-		#mech girl
-		#patches
-		#sir finley
-		#queen tagwoggle
-		#AFK
+	elif board_number == 30: #rat king
+		board.summon(create_minion(1).buff(1,1))
+		board.summon(create_minion(2))
+	elif board_number == 31:
+		board.summon(create_minion(3).buff(1,1))
+	elif board_number == 32: #curator
+		board.summon(create_minion(1))
+		board.summon(create_minion(2))
+		board.summon(create_minion(16))
+	elif board_number == 33:
+		board.summon(create_minion(3))
+		board.summon(create_minion(16))
+	elif board_number == 34:
+		board.summon(create_minion(4))
+		board.summon(create_minion(16))
+	elif board_number == 35:
+		board.summon(create_minion(5))
+		board.summon(create_minion(16))
+	elif board_number == 36:
+		board.summon(create_minion(6))
+		board.summon(create_minion(16))
+	elif board_number == 37:
+		board.summon(create_minion(8))
+		board.summon(create_minion(16))
+	elif board_number == 38:
+		board.summon(create_minion(9))
+		board.summon(create_minion(16))
+	elif board_number == 39:
+		board.summon(create_minion(10))
+		board.summon(create_minion(11))
+		board.summon(create_minion(16))
+	elif board_number == 40:
+		board.summon(create_minion(12))
+		board.summon(create_minion(16))
+	elif board_number == 41:
+		board.summon(create_minion(13))
+		board.summon(create_minion(16))
+	elif board_number == 42:
+		board.summon(create_minion(14))
+		board.summon(create_minion(16))
+	elif board_number == 43:
+		board.summon(create_minion(15))
+		board.summon(create_minion(16))
+	elif board_number == 44: #lich king
+		reborn_cat = create_minion(1)
+		reborn_cat.deathrattle = [create_minion(1)]
+		board.summon(reborn_cat)
+	elif board_number == 45:
+		reborn_murloc_tidehunter = create_minion(10)
+		reborn_murloc_tidehunter.deathrattle = [create_minion(10)]
+		board.summon(reborn_murloc_tidehunter)
+	elif board_number == 46: #millificient manastorm
+		board.summon(create_minion(6).buff(1,0))
+	elif board_number == 47:
+		board.summon(create_minion(8).buff(1,0))
+	elif board_number == 48: #sir finley
+		board.summon(create_minion(1).buff(1,1))
+	elif board_number == 49:
+		board.summon(create_minion(10).buff(1,1))
+	elif board_number == 49: #edwin van cleef
+		board.summon(create_minion(1).buff(1,1))
+	elif board_number == 50:
+		board.summon(create_minion(10).buff(1,1))
+	elif board_number == 51: #queen tagwoggle
+		board.summon(create_minion(1).buff(0,1))
+	elif board_number == 52:
+		board.summon(create_minion(10).buff(0,1))
+	elif board_number == 53: #rag
+		return board
+	elif board_number == 54: #nefarian
+		return board
+	elif board_number == 55:
+		board.summon(create_minion(1))
+	elif board_number == 56:
+		board.summon(create_minion(10))
+	elif board_number == 57: #A F Kay
+		return board
 	return board
 
-def run_simulations():
+def run_simulations(start=0, end=58):
 	results = {}
-	for i in range(13,14):
-		for j in range(i,12):
+	for i in range(start, end):
+		for j in range(i, end):
 			results[i,j] = simulate(i,j)
 	return results
 
-# their_board = Board()
+def handle_hero_powers(bottom_board, top_board, bottom_board_number, top_board_number):
+	#rag
+	if bottom_board_number == 53:
+		hit_minions = random.sample(range(0,len(top_board)), min(len(top_board), 2))
+		for i in hit_minions:
+			top_board.get_minion(i).buff(0,-8)
+	if top_board_number == 53:
+		hit_minions = random.sample(range(0,len(bottom_board)), min(len(bottom_board), 2))
+		for i in hit_minions:
+			bottom_board.get_minion(i).buff(0,-8)
+	#nefarian
+	if bottom_board_number >= 54 and bottom_board_number <= 56:
+		for i in range(len(top_board)):
+			top_board.get_minion(i).buff(0,-1)
+	if top_board_number >= 54 and top_board_number <= 56:
+		for i in range(len(bottom_board)):
+			bottom_board.get_minion(i).buff(0,-1)
+
+their_board = Board()
 results = run_simulations()
 print(results)
 
-# with open('test.csv', 'w') as f:
-    # for key in results.keys():
-        # f.write("%s,%s\n"%(key,results[key]))
-
-# their_board.summon(Minion("Murloc",1,1))
-# their_board.summon(Minion("Murloc Tidecaller",2,2))
-# print(their_board)
-# my_board = Board()
-# my_board.summon(Minion("Direwolf Alpha",1,1))
-# my_board.summon(Minion("Direwolf Alpha",2,2))
-# results = simulate(my_board, their_board, simulations=10)
+with open('simulation_results.csv', 'w') as f:
+    for key in results.keys():
+        f.write("%s,%s\n"%(key,results[key]))
